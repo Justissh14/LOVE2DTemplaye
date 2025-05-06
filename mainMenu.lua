@@ -6,7 +6,7 @@ function mainMenu.load()
 end
 
 function mainMenu.update(dt)
-    -- Placeholder: Add menu animations or selection logic here
+   
 end
 
 function mainMenu.draw()
