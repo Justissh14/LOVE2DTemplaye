@@ -1,17 +1,15 @@
 Object = require("Classic")
 local bullet = Object:extend()
 
-function bullet:new(x,y, up, down, left, right)
+function bullet:new(x,y)
     self.image = love.graphics.newImage("Assets/Images/NL2D_bullet.png")
     self.x = x
     self.y = y
     self.width = self.image:getWidth()
     self.height = self.image:getHeight()
     self.speed = 5000
-    self.up = false
-    self.left = false
-    self.down = false
-    self.right = false
+    self.dirX = dirX
+    self.dirY = dirY
 
 end
 
