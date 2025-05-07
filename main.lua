@@ -4,33 +4,31 @@ if arg[2] == "debug" then
     require("lldebugger").start()
 end
 
-local player = { x = 100, y = 100, width = 32, height = 50, speed = 200 }
+local Player = require("player")
+local player
 local enemies = {}
-local spawnCooldown = 0
-
 local score = 0
 local Lives = 1
 local Timer = 0
 local gameStarted = false
 local gameOver = false
-local showInfo = false  
+local showInfo = false
 
 function love.load()
     love.window.setMode(800, 600, { resizable = true, vsync = true })
     love.window.setTitle("NoLove2D Game")
 
-    player.image = love.graphics.newImage("Assets/Images/NL2D_Player.png")
-    
     font = love.graphics.newFont(30)
     smallFont = love.graphics.newFont(20)
 
+    player = Player:new()
     spawnEnemies()
 end
 
 function spawnEnemies()
     enemies = {}
     local enemyImage = love.graphics.newImage("Assets/Images/NL2D_Enemy_alt.png")
-    local minDistance = 100  
+    local minDistance = 100
 
     for i = 1, 5 do
         local safe = false
@@ -77,7 +75,7 @@ function updateEnemies(dt)
                 e.touched = true
                 Lives = Lives - 1
                 print("Collision with enemy!")
-                
+
                 if Lives <= 0 then
                     gameOver = true
                     gameStarted = false
@@ -90,24 +88,17 @@ function updateEnemies(dt)
 end
 
 function checkCollision(player, enemy)
-    return player.x < enemy.x + enemy.width and player.x + player.width > enemy.x and
-           player.y < enemy.y + enemy.height and player.y + player.height > enemy.y
+    return player.x < enemy.x + enemy.width and
+           player.x + player.width > enemy.x and
+           player.y < enemy.y + enemy.height and
+           player.y + player.height > enemy.y
 end
 
 function love.update(dt)
-    if not gameStarted or gameOver or showInfo then return end  
+    if not gameStarted or gameOver or showInfo then return end
 
-    
-    if love.keyboard.isDown("w") then player.y = player.y - player.speed * dt end
-    if love.keyboard.isDown("s") then player.y = player.y + player.speed * dt end
-    if love.keyboard.isDown("a") then player.x = player.x - player.speed * dt end
-    if love.keyboard.isDown("d") then player.x = player.x + player.speed * dt end
-
-    player.x = math.max(0, math.min(player.x, love.graphics.getWidth() - player.width))
-    player.y = math.max(0, math.min(player.y, love.graphics.getHeight() - player.height))
-
+    player:update(dt)
     Timer = Timer + dt
-
     updateEnemies(dt)
 end
 
@@ -123,7 +114,7 @@ function love.draw()
         love.graphics.setColor(1, 1, 1)
         love.graphics.setFont(font)
 
-        if showInfo then  --this is temporary, i will insert the written text later
+        if showInfo then
             love.graphics.printf("Game Tips:\n\n- Use WASD to move\n- Avoid enemies\n- Press ENTER to start", 0, love.graphics.getHeight() / 2 - 100, love.graphics.getWidth(), "center")
             love.graphics.printf("Press ESC to go back", 0, love.graphics.getHeight() / 2 + 100, love.graphics.getWidth(), "center")
         else
@@ -138,20 +129,10 @@ function love.draw()
     love.graphics.printf("Score: " .. score, 20, 13, love.graphics.getWidth(), "left")
     love.graphics.printf("Lives: " .. Lives, 150, 13, love.graphics.getWidth(), "left")
     love.graphics.printf("Timer: " .. Timer, 300, 13, love.graphics.getWidth(), "left")
-
     love.graphics.printf("player.x: " .. player.x, 20, 50, love.graphics.getWidth(), "left")
     love.graphics.printf("player.y: " .. player.y, 20, 80, love.graphics.getWidth(), "left")
 
-    if player.image then
-        local scaleX = player.width / player.image:getWidth()
-        local scaleY = player.height / player.image:getHeight()
-        love.graphics.setColor(1, 1, 1)
-        love.graphics.draw(player.image, player.x + player.width / 2, player.y + player.height / 2, 0, scaleX, scaleY,
-            player.image:getWidth() / 2, player.image:getHeight() / 2)
-    else
-        love.graphics.setColor(1, 1, 1)
-        love.graphics.rectangle("fill", player.x, player.y, player.width, player.height)
-    end
+    player:draw()
 
     for _, e in ipairs(enemies) do
         love.graphics.setColor(1, 1, 1)
@@ -162,29 +143,25 @@ end
 function love.keypressed(key)
     if key == "return" then
         if not gameStarted or gameOver then
-            
             gameStarted = true
             gameOver = false
             Lives = 1
             score = 0
-            player.x = 100
-            player.y = 100
+            Timer = 0
+            player = Player:new()
             spawnEnemies()
-            showInfo = false  
+            showInfo = false
         end
     elseif key == "q" then
-        
         showInfo = not showInfo
     elseif key == "escape" then
         if showInfo then
-            
             showInfo = false
         else
             love.event.quit()
         end
     end
 end
-
 
 function love.errorhandler(msg)
     if lldebugger then
@@ -193,5 +170,6 @@ function love.errorhandler(msg)
         return love.errorhandler(msg)
     end
 end
+
 
 
