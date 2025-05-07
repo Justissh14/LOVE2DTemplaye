@@ -1,5 +1,5 @@
---for all your player code justiss
 local Player = {}
+local Bullet = require("bullet")
 Player.__index = Player
 
 function Player:new()
@@ -10,7 +10,13 @@ function Player:new()
     self.height = 50
     self.speed = 200
     self.image = love.graphics.newImage("Assets/Images/NL2D_Player.png")
+    self.Bullets = {}
     return self
+end
+
+function Player:Shoot(up, down, left, right)
+    local bullet = Bullet(self.x,self.y, up, down, left, right)
+    table.insert(self.Bullets, bullet)
 end
 
 function Player:update(dt)
@@ -19,11 +25,22 @@ function Player:update(dt)
     if love.keyboard.isDown("a") then self.x = self.x - self.speed * dt end
     if love.keyboard.isDown("d") then self.x = self.x + self.speed * dt end
 
+    for i = #self.Bullets, 1, -1 do
+            local value = self.Bullets[i]
+            value:update(dt)
+        if value.x < 0 or value.x + value.width > love.graphics.getWidth() or value.y < 0 or value.y +value.height > love.graphics.getHeight() then
+            table.remove(self.Bullets, i)
+        end
+    end
+
     self.x = math.max(0, math.min(self.x, love.graphics.getWidth() - self.width))
     self.y = math.max(0, math.min(self.y, love.graphics.getHeight() - self.height))
 end
 
 function Player:draw()
+    for index, value in ipairs(self.Bullets) do
+        value:draw()
+        end
     if self.image then
         local scaleX = self.width / self.image:getWidth()
         local scaleY = self.height / self.image:getHeight()

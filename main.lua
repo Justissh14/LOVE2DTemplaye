@@ -97,7 +97,15 @@ end
 function love.update(dt)
     if not gameStarted or gameOver or showInfo then return end
 
-    player:update(dt)
+    player:update(dt) --up, down, left, right
+    if love.keyboard.isDown("up") then player:Shoot(true, false, false , false) end
+    if love.keyboard.isDown("up") and love.keyboard.isDown("left")  then player:Shoot(true, false, true, false) end
+    if love.keyboard.isDown("up") and love.keyboard.isDown("right") then player:Shoot(true, false, false, true) end
+    if love.keyboard.isDown("down") then player:Shoot(false, true, false, false) end
+    if love.keyboard.isDown("down") and love.keyboard.isDown("left") then player:Shoot(false, true, true, false) end
+    if love.keyboard.isDown("down") and love.keyboard.isDown("right") then player:Shoot(false, true, false, true) end
+    if love.keyboard.isDown("left") then player:Shoot(false, false, true, false) end
+    if love.keyboard.isDown("right") then player:Shoot(false, false, false, true) end
     Timer = Timer + dt
     updateEnemies(dt)
 end
