@@ -139,6 +139,9 @@ function love.draw()
     love.graphics.printf("Lives: " .. Lives, 150, 13, love.graphics.getWidth(), "left")
     love.graphics.printf("Timer: " .. Timer, 300, 13, love.graphics.getWidth(), "left")
 
+    love.graphics.printf("player.x: " .. player.x, 20, 50, love.graphics.getWidth(), "left")
+    love.graphics.printf("player.y: " .. player.y, 20, 80, love.graphics.getWidth(), "left")
+
     if player.image then
         local scaleX = player.width / player.image:getWidth()
         local scaleY = player.height / player.image:getHeight()
