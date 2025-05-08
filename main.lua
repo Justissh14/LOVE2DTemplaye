@@ -112,11 +112,21 @@ function love.update(dt)
             for j = #enemies, 1, -1 do
                 local e = enemies[j]
                 if checkCollision(b, e) then
-                    table.remove(enemies, j)
+                    enemies[j] = {
+                        x = math.random(0, 800),
+                        y = math.random(0, 600),
+                        width = e.width,
+                        height = e.height,
+                        speed = e.speed,
+                        image = e.image,
+                        touched = false
+                    }
                     table.remove(bullets, i)
                     score = score + 1
                     break
                 end
+                
+
             end
         end
     end
@@ -135,7 +145,8 @@ function love.draw()
         love.graphics.setFont(font)
 
         if showInfo then
-            love.graphics.printf("Game Tips:\n\n- Use WASD to move\n- Avoid enemies\n- Press SPACE to shoot\n- Press ENTER to start", 0, love.graphics.getHeight() / 2 - 100, love.graphics.getWidth(), "center")
+            love.graphics.printf("Game Tips:\n\n- Use WASD to move\n\n- Avoid enemies\n- Press SPACE to shoot\n- Press ENTER to start", --placeholder
+            0, love.graphics.getHeight() / 2 - 100, love.graphics.getWidth(), "center")
             love.graphics.printf("Press ESC to go back", 0, love.graphics.getHeight() / 2 + 100, love.graphics.getWidth(), "center")
         else
             love.graphics.printf("Press ENTER to Start", 0, love.graphics.getHeight() / 2 - 100, love.graphics.getWidth(), "center")
