@@ -1,12 +1,13 @@
-
-
 if arg[2] == "debug" then
     require("lldebugger").start()
 end
 
 local Player = require("player")
+local Bullet = require("bullet")
+
 local player
 local enemies = {}
+local bullets = {}
 local score = 0
 local Lives = 1
 local Timer = 0
@@ -87,11 +88,11 @@ function updateEnemies(dt)
     end
 end
 
-function checkCollision(player, enemy)
-    return player.x < enemy.x + enemy.width and
-           player.x + player.width > enemy.x and
-           player.y < enemy.y + enemy.height and
-           player.y + player.height > enemy.y
+function checkCollision(a, b)
+    return a.x < b.x + b.width and
+           a.x + a.width > b.x and
+           a.y < b.y + b.height and
+           a.y + a.height > b.y
 end
 
 function love.update(dt)
@@ -100,6 +101,26 @@ function love.update(dt)
     player:update(dt)
     Timer = Timer + dt
     updateEnemies(dt)
+
+    -- Update bullets
+    for i = #bullets, 1, -1 do
+        local b = bullets[i]
+        b:update(dt)
+        if b.x < 0 or b.x > 800 or b.y < 0 or b.y > 600 then
+            table.remove(bullets, i)
+        else
+            -- Check collision with enemies
+            for j = #enemies, 1, -1 do
+                local e = enemies[j]
+                if checkCollision(b, e) then
+                    table.remove(enemies, j)
+                    table.remove(bullets, i)
+                    score = score + 1
+                    break
+                end
+            end
+        end
+    end
 end
 
 function love.draw()
@@ -115,7 +136,7 @@ function love.draw()
         love.graphics.setFont(font)
 
         if showInfo then
-            love.graphics.printf("Game Tips:\n\n- Use WASD to move\n- Avoid enemies\n- Press ENTER to start", 0, love.graphics.getHeight() / 2 - 100, love.graphics.getWidth(), "center")
+            love.graphics.printf("Game Tips:\n\n- Use WASD to move\n- Avoid enemies\n- Press SPACE to shoot\n- Press ENTER to start", 0, love.graphics.getHeight() / 2 - 100, love.graphics.getWidth(), "center")
             love.graphics.printf("Press ESC to go back", 0, love.graphics.getHeight() / 2 + 100, love.graphics.getWidth(), "center")
         else
             love.graphics.printf("Press ENTER to Start", 0, love.graphics.getHeight() / 2 - 100, love.graphics.getWidth(), "center")
@@ -129,10 +150,12 @@ function love.draw()
     love.graphics.printf("Score: " .. score, 20, 13, love.graphics.getWidth(), "left")
     love.graphics.printf("Lives: " .. Lives, 150, 13, love.graphics.getWidth(), "left")
     love.graphics.printf("Timer: " .. Timer, 300, 13, love.graphics.getWidth(), "left")
-    love.graphics.printf("player.x: " .. player.x, 20, 50, love.graphics.getWidth(), "left")
-    love.graphics.printf("player.y: " .. player.y, 20, 80, love.graphics.getWidth(), "left")
 
     player:draw()
+
+    for _, b in ipairs(bullets) do
+        b:draw()
+    end
 
     for _, e in ipairs(enemies) do
         love.graphics.setColor(1, 1, 1)
@@ -150,15 +173,8 @@ function love.keypressed(key)
             Timer = 0
             player = Player:new()
             spawnEnemies()
+            bullets = {}
             showInfo = false
-            if love.keyboard.isDown("up") then player:Shoot() end
-            if love.keyboard.isDown("up") and love.keyboard.isDown("left")  then player:Shoot() end
-            if love.keyboard.isDown("up") and love.keyboard.isDown("right") then player:Shoot() end
-            if love.keyboard.isDown("down") then player:Shoot() end
-            if love.keyboard.isDown("down") and love.keyboard.isDown("left") then player:Shoot() end
-            if love.keyboard.isDown("down") and love.keyboard.isDown("right") then player:Shoot() end
-            if love.keyboard.isDown("left") then player:Shoot() end
-            if love.keyboard.isDown("right") then player:Shoot() end
         end
     elseif key == "q" then
         showInfo = not showInfo
@@ -167,6 +183,22 @@ function love.keypressed(key)
             showInfo = false
         else
             love.event.quit()
+        end
+    elseif key == "space" then
+        if gameStarted and not gameOver then
+            local dx, dy = 0, 0
+            if love.keyboard.isDown("up") then dy = -1 end
+            if love.keyboard.isDown("down") then dy = 1 end
+            if love.keyboard.isDown("left") then dx = -1 end
+            if love.keyboard.isDown("right") then dx = 1 end
+
+            if dx ~= 0 or dy ~= 0 then
+                local length = math.sqrt(dx * dx + dy * dy)
+                dx = dx / length
+                dy = dy / length
+                local bullet = Bullet(player.x + player.width / 2, player.y + player.height / 2, dx, dy)
+                table.insert(bullets, bullet)
+            end
         end
     end
 end
@@ -178,6 +210,7 @@ function love.errorhandler(msg)
         return love.errorhandler(msg)
     end
 end
+
 
 
 
