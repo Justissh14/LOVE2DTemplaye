@@ -31,7 +31,7 @@ function spawnEnemies()
     local enemyImage = love.graphics.newImage("Assets/Images/NL2D_Enemy_alt.png")
     local minDistance = 100
 
-    for i = 1, 5 do
+    for i = 1, 10 do
         local safe = false
         local ex, ey
 
@@ -102,7 +102,7 @@ function love.update(dt)
     Timer = Timer + dt
     updateEnemies(dt)
 
-    -- Update bullets
+    
     for i = #bullets, 1, -1 do
         local b = bullets[i]
         b:update(dt)

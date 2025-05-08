@@ -10,7 +10,7 @@ function enemy.spawnEnemies(player)
     local enemyImage = love.graphics.newImage("Assets/Images/NL2D_Enemy_alt.png")
     local minDistance = 100  
 
-    for i = 1, 5 do
+    for i = 1, 10 do
         local safe = false
         local ex, ey
 
