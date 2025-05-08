@@ -109,7 +109,6 @@ function love.update(dt)
         if b.x < 0 or b.x > 800 or b.y < 0 or b.y > 600 then
             table.remove(bullets, i)
         else
-            -- Check collision with enemies
             for j = #enemies, 1, -1 do
                 local e = enemies[j]
                 if checkCollision(b, e) then
@@ -188,12 +187,12 @@ function love.keypressed(key)
         if gameStarted and not gameOver then
             local dx, dy = 0, 0
             if love.keyboard.isDown("up") then dy = -1 end
-            if love.keyboard.isDown("down") then dy = 1 end
+            if love.keyboard.isDown("down") then dy = 1 end  --i moved the direction check here and it seems to work
             if love.keyboard.isDown("left") then dx = -1 end
             if love.keyboard.isDown("right") then dx = 1 end
 
             if dx ~= 0 or dy ~= 0 then
-                local length = math.sqrt(dx * dx + dy * dy)
+                local length = math.sqrt(dx * dx + dy * dy) -- this is what i meant about the direction check when its created
                 dx = dx / length
                 dy = dy / length
                 local bullet = Bullet(player.x + player.width / 2, player.y + player.height / 2, dx, dy)
