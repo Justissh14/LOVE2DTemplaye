@@ -32,7 +32,7 @@ function enemy.spawnEnemies(player)
             y = ey,
             width = 32,
             height = 50,
-            speed = 50,
+            speed = 25,
             image = enemyImage,
             touched = false,  
         })

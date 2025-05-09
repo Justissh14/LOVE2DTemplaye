@@ -112,21 +112,11 @@ function love.update(dt)
             for j = #enemies, 1, -1 do
                 local e = enemies[j]
                 if checkCollision(b, e) then
-                    enemies[j] = {
-                        x = math.random(0, 800),
-                        y = math.random(0, 600),
-                        width = e.width,
-                        height = e.height,
-                        speed = e.speed,
-                        image = e.image,
-                        touched = false
-                    }
+                    table.remove(enemies, j)
                     table.remove(bullets, i)
                     score = score + 1
                     break
                 end
-                
-
             end
         end
     end
@@ -145,9 +135,10 @@ function love.draw()
         love.graphics.setFont(font)
 
         if showInfo then
-            love.graphics.printf("Game Tips:\n\n- Use WASD to move\n\n- Avoid enemies\n- Press SPACE to shoot\n- Press ENTER to start", --placeholder
-            0, love.graphics.getHeight() / 2 - 100, love.graphics.getWidth(), "center")
-            love.graphics.printf("Press ESC to go back", 0, love.graphics.getHeight() / 2 + 100, love.graphics.getWidth(), "center")
+            love.graphics.printf("Game Tips:\n\n- Use WASD to move\n- Avoid enemies\n- Press SPACE to shoot\n\n\n In the distant future all "..
+            "games are AI\n Take up a trusty pair of blasters and protect\n the last open-source engine on the planet\n ensure the future isn't one with..."..
+            "\n NOLOVE2D!!!\n (enjoy the game:3)", 0, love.graphics.getHeight() / 2 - 175, love.graphics.getWidth(), "center")
+            love.graphics.printf("Press ESC to go back", 0, love.graphics.getHeight() / 2 + 25, love.graphics.getWidth(), "center")
         else
             love.graphics.printf("Press ENTER to Start", 0, love.graphics.getHeight() / 2 - 100, love.graphics.getWidth(), "center")
             love.graphics.printf("Press Q for Info", 0, love.graphics.getHeight() / 2, love.graphics.getWidth(), "center")
