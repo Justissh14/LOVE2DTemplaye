@@ -16,7 +16,7 @@ local gameOver = false
 local showInfo = false
 
 function love.load()
-    love.window.setMode(800, 600, { resizable = true, vsync = true })
+    love.window.setMode(800, 600, { resizable = false, vsync = true })
     love.window.setTitle("NoLove2D Game")
 
     font = love.graphics.newFont(30)
@@ -31,7 +31,7 @@ function spawnEnemies()
     local enemyImage = love.graphics.newImage("Assets/Images/NL2D_Enemy_alt.png")
     local minDistance = 100
 
-    for i = 1, 10 do
+    for i = 1, 7 do
         local safe = false
         local ex, ey
 
@@ -53,7 +53,7 @@ function spawnEnemies()
             y = ey,
             width = 32,
             height = 50,
-            speed = 50,
+            speed = 25,
             image = enemyImage,
             touched = false
         })
@@ -61,6 +61,7 @@ function spawnEnemies()
 end
 
 function updateEnemies(dt)
+    
     for _, e in ipairs(enemies) do
         local dx = player.x - e.x
         local dy = player.y - e.y
@@ -112,11 +113,21 @@ function love.update(dt)
             for j = #enemies, 1, -1 do
                 local e = enemies[j]
                 if checkCollision(b, e) then
-                    table.remove(enemies, j)
+                    enemies[j] = {
+                        x = math.random(0, 800),
+                        y = math.random(0, 600),
+                        width = e.width,
+                        height = e.height,
+                        speed = e.speed,
+                        image = e.image,
+                        touched = false
+                    }
                     table.remove(bullets, i)
                     score = score + 1
                     break
                 end
+                
+
             end
         end
     end
@@ -135,10 +146,9 @@ function love.draw()
         love.graphics.setFont(font)
 
         if showInfo then
-            love.graphics.printf("Game Tips:\n\n- Use WASD to move\n- Avoid enemies\n- Press SPACE to shoot\n\n\n In the distant future all "..
-            "games are AI\n Take up a trusty pair of blasters and protect\n the last open-source engine on the planet\n ensure the future isn't one with..."..
-            "\n NOLOVE2D!!!\n (enjoy the game:3)", 0, love.graphics.getHeight() / 2 - 175, love.graphics.getWidth(), "center")
-            love.graphics.printf("Press ESC to go back", 0, love.graphics.getHeight() / 2 + 25, love.graphics.getWidth(), "center")
+            love.graphics.printf("Game Tips:\n\n- Use WASD to move\n\n- Avoid enemies\n- Press SPACE to shoot\n- Press ENTER to start", --placeholder
+            0, love.graphics.getHeight() / 2 - 100, love.graphics.getWidth(), "center")
+            love.graphics.printf("Press ESC to go back", 0, love.graphics.getHeight() / 2 + 100, love.graphics.getWidth(), "center")
         else
             love.graphics.printf("Press ENTER to Start", 0, love.graphics.getHeight() / 2 - 100, love.graphics.getWidth(), "center")
             love.graphics.printf("Press Q for Info", 0, love.graphics.getHeight() / 2, love.graphics.getWidth(), "center")
