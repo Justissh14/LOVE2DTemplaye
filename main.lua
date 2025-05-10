@@ -18,6 +18,8 @@ local showInfo = false
 function love.load()
     love.window.setMode(800, 600, { resizable = false, vsync = true })
     love.window.setTitle("NoLove2D Game")
+    
+    background = love.graphics.newImage("Assets/Images/NL2D_Background.png")
 
     font = love.graphics.newFont(30)
     smallFont = love.graphics.newFont(20)
@@ -155,12 +157,13 @@ function love.draw()
         end
         return
     end
+    love.graphics.draw(background, 0, 0, 0, love.graphics.getWidth() / background:getWidth(), love.graphics.getHeight() / background:getHeight())
 
-    love.graphics.setColor(1, 1, 1)
+    love.graphics.setColor(0, 0, 0)
     love.graphics.setFont(smallFont)
-    love.graphics.printf("Score: " .. score, 20, 13, love.graphics.getWidth(), "left")
-    love.graphics.printf("Lives: " .. Lives, 150, 13, love.graphics.getWidth(), "left")
-    love.graphics.printf("Timer: " .. Timer, 300, 13, love.graphics.getWidth(), "left")
+    love.graphics.printf("Score: " .. score, 20, 5, love.graphics.getWidth(), "left")
+    love.graphics.printf("Lives: " .. Lives, 150, 5, love.graphics.getWidth(), "left")
+    love.graphics.printf("Timer: " .. Timer, 300, 5, love.graphics.getWidth(), "left")
 
     player:draw()
 

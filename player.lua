@@ -9,7 +9,7 @@ function Player:new()
     self.width = 32
     self.height = 50
     self.speed = 200
-    self.image = love.graphics.newImage("Assets/Images/NL2D_Player.png")
+    self.image = love.graphics.newImage("Assets/Images/NL2D_Player_updated.png")
     self.Bullets = {}
     return self
 end
