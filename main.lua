@@ -150,8 +150,7 @@ function love.draw()
         love.graphics.setFont(font)
 
         if showInfo then
-            love.graphics.printf("Game Tips:\n\n- Use WASD to move\n\n- Avoid enemies\n- Press SPACE to shoot\n- Press ENTER to start", --placeholder
-            0, love.graphics.getHeight() / 2 - 100, love.graphics.getWidth(), "center")
+            love.graphics.printf("Game Tips:\n\n- Use WASD to move\n\n- Avoid enemies\n- Press SPACE to shoot\n- Press ENTER to start",0, love.graphics.getHeight() / 2 - 100, love.graphics.getWidth(), "center")
             love.graphics.printf("Press ESC to go back", 0, love.graphics.getHeight() / 2 + 100, love.graphics.getWidth(), "center")
         else
             love.graphics.printf("Press ENTER to Start", 0, love.graphics.getHeight() / 2 - 100, love.graphics.getWidth(), "center")
@@ -221,13 +220,13 @@ function love.keypressed(key)
     end
 end
 
-function love.errorhandler(msg)
-    if lldebugger then
-        error(msg, 2)
-    else
-        return love.errorhandler(msg)
-    end
-end
+-- function love.errorhandler(msg)
+--     if lldebugger then
+--         error(msg, 2)
+--     else
+--         return love.errorhandler(msg)
+--     end
+-- end
 
 
 
