@@ -150,10 +150,15 @@ function love.draw()
         love.graphics.setFont(font)
 
         if showInfo then
-            love.graphics.printf("Game Tips:\n\n- Use WASD to move\n\n- Avoid enemies\n- Press SPACE to shoot\n- Press ENTER to start",0, love.graphics.getHeight() / 2 - 100, love.graphics.getWidth(), "center")
-            love.graphics.printf("Press ESC to go back", 0, love.graphics.getHeight() / 2 + 100, love.graphics.getWidth(), "center")
+            love.graphics.printf("Game Tips:\n\n- Use WASD to move\n\n- Avoid enemies\n- Press SPACE to shoot\nin the futere all games are AI\n"..
+            "there is only one Open-Source engine left on the internet\n".. 
+            "take up a pair of blasters and wipe out AI data to protect\n"..
+            "the last indie engine and make sure the future isn't one with...\n".. 
+            "NOLOVE2D\n enjoy the game :3", --placeholder
+            0, love.graphics.getHeight() / 2 - 250, love.graphics.getWidth(), "center")
+            love.graphics.printf("Press ESC to go back", 0, love.graphics.getHeight() / 2 - 300, love.graphics.getWidth(), "center")
         else
-            love.graphics.printf("Press ENTER to Start", 0, love.graphics.getHeight() / 2 - 100, love.graphics.getWidth(), "center")
+            love.graphics.printf("Press ENTER to Start", 0, love.graphics.getHeight() / 2 - 200, love.graphics.getWidth(), "center")
             love.graphics.printf("Press Q for Info", 0, love.graphics.getHeight() / 2, love.graphics.getWidth(), "center")
         end
         return
@@ -220,13 +225,13 @@ function love.keypressed(key)
     end
 end
 
--- function love.errorhandler(msg)
---     if lldebugger then
---         error(msg, 2)
---     else
---         return love.errorhandler(msg)
---     end
--- end
+function love.errorhandler(msg)
+    if lldebugger then
+        error(msg, 2)
+    else
+        return love.errorhandler(msg)
+    end
+end
 
 
 
