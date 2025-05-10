@@ -24,6 +24,8 @@ function love.load()
     font = love.graphics.newFont(30)
     smallFont = love.graphics.newFont(20)
 
+    shootSound = love.audio.newSource("Assets/sfx/StndrdGunShot.ogg", "static")
+
     player = Player:new()
     spawnEnemies()
 end
@@ -199,6 +201,8 @@ function love.keypressed(key)
             love.event.quit()
         end
     elseif key == "space" then
+        shootSound:stop()
+        shootSound:play()
         if gameStarted and not gameOver then
             local dx, dy = 0, 0
             if love.keyboard.isDown("up") then dy = -1 end

@@ -2,7 +2,7 @@ local Object = require("Classic")
 local bullet = Object:extend()
 
 function bullet:new(x, y, dirX, dirY)
-    self.image = love.graphics.newImage("Assets/Images/NL2D_bullet.png")
+    self.image = love.graphics.newImage("Assets/Images/NL2D_bullet_rework.png")
     self.x = x
     self.y = y
     self.width = self.image:getWidth()
